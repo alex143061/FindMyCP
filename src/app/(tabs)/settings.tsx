@@ -234,10 +234,10 @@ export default function SettingsScreen() {
               </Text>
               <Link href="/login" asChild>
                 <Pressable
-                  style={[
+                  style={StyleSheet.flatten([
                     styles.accountButton,
                     { backgroundColor: colors.accent },
-                  ]}
+                  ])}
                 >
                   <Text style={styles.accountButtonText}>Sign in or create account</Text>
                 </Pressable>

@@ -27,6 +27,17 @@
       "expo-router",
       "expo-sqlite",
       "expo-secure-store"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "eas": {
+        "projectId": "7da4322c-84e5-428f-bc48-3e159755ce26"
+      }
+    },
+    "owner": "alex143061"
   }
 }

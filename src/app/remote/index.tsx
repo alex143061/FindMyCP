@@ -123,14 +123,14 @@ export default function RemoteDevicesScreen() {
             >
               <Pressable
                 accessibilityRole="button"
-                style={({ pressed }) => [
+                style={({ pressed }) => StyleSheet.flatten([
                   styles.deviceCard,
                   {
                     backgroundColor: colors.surface,
                     borderColor: colors.border,
                     opacity: pressed ? 0.8 : 1,
                   },
-                ]}
+                ])}
               >
                 <View style={styles.row}>
                   <View style={styles.deviceMark}>

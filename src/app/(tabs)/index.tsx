@@ -80,54 +80,13 @@ export default function DashboardScreen() {
   );
 
   useEffect(() => {
-    let reachable = false;
-    let attempts = 0;
-    let retryTimeout: ReturnType<typeof setTimeout> | undefined;
-
-    const scheduleRetry = () => {
-      if (!reachable || !session?.user.id) return;
-      const delay = Math.min(5_000 * 2 ** attempts, 5 * 60_000);
-      attempts += 1;
-      retryTimeout = setTimeout(() => {
-        void synchronize();
-      }, delay);
-    };
-
-    const synchronize = async () => {
-      if (!reachable || !session?.user.id) return;
-      try {
-        const uploaded = await syncPendingLocations(session.user.id);
-        attempts = 0;
-        if (uploaded > 0) setSyncMessage(`${uploaded} records synced`);
-        await refresh();
-      } catch (syncError) {
-        console.error('Automatic location sync failed:', syncError);
-        await refresh().catch((refreshError: unknown) => {
-          console.error('Could not refresh after a sync failure:', refreshError);
-        });
-        if (retryTimeout) clearTimeout(retryTimeout);
-        scheduleRetry();
-      }
-    };
-
     const unsubscribe = NetInfo.addEventListener((state) => {
-      reachable =
-        state.isConnected === true && state.isInternetReachable !== false;
-      setOnline(reachable);
-      if (reachable) {
-        if (retryTimeout) clearTimeout(retryTimeout);
-        attempts = 0;
-        void synchronize();
-      } else if (retryTimeout) {
-        clearTimeout(retryTimeout);
-        retryTimeout = undefined;
-      }
+      setOnline(
+        state.isConnected === true && state.isInternetReachable !== false,
+      );
     });
-    return () => {
-      unsubscribe();
-      if (retryTimeout) clearTimeout(retryTimeout);
-    };
-  }, [refresh, session?.user.id]);
+    return unsubscribe;
+  }, []);
 
   const toggleTracking = async () => {
     setBusy(true);
@@ -246,10 +205,10 @@ export default function DashboardScreen() {
             <Link href="/map" asChild>
               <Pressable
                 accessibilityRole="button"
-                style={[
+                style={StyleSheet.flatten([
                   styles.mapLink,
                   { backgroundColor: colors.accentSoft },
-                ]}
+                ])}
               >
                 <Text style={[styles.mapLinkText, { color: colors.accent }]}>
                   View map
@@ -361,13 +320,13 @@ export default function DashboardScreen() {
         {session ? (
           <Link href="/remote" asChild>
             <Pressable
-              style={[
+              style={StyleSheet.flatten([
                 styles.remoteButton,
                 {
                   backgroundColor: colors.surface,
                   borderColor: colors.border,
                 },
-              ]}
+              ])}
             >
               <Text style={[styles.sectionTitle, { color: colors.text }]}>
                 View my other devices

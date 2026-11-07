@@ -21,7 +21,10 @@ export function Screen({
   );
   return (
     <SafeAreaView
-      style={[styles.screen, { backgroundColor: colors.background }]}
+      style={StyleSheet.flatten([
+        styles.screen,
+        { backgroundColor: colors.background },
+      ])}
       edges={['top', 'left', 'right']}
     >
       {content}

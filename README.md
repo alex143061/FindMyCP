@@ -66,6 +66,9 @@ restart tracking after such restrictions.
 - The location task writes directly to SQLite, independently of network
   connectivity. Pending records are retained until Supabase confirms an
   idempotent upsert.
+- While the app is running, connectivity changes trigger sync from any screen;
+  failed uploads retry with increasing delays. The background location task
+  also attempts sync after receiving a location fix.
 - Sign-in is required for cloud backup and remote viewing, not for local GPS
   recording.
 - Background recording requires a native development/production build and the
